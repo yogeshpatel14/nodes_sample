@@ -1,6 +1,6 @@
-const { createProfile } = require("../../controller/profile");
 const { SignUpSchema } = require("../../model/auth/signup");
-
+const ErrorCode = require("../../contants/mongoDB-error-code.json");
+const { createProfile } = require("../../provider/profile");
 const saveSignupDataToDb = async (req, res, next) => {
   let signup = new SignUpSchema({
     userName: req.body.userName,
@@ -15,7 +15,7 @@ const saveSignupDataToDb = async (req, res, next) => {
       console.log(_response);
       await createProfile({
         userId: _response._id.toString(),
-        userName: req.body.username,
+        userName: req.body.userName,
       });
       res.status(200).send({ message: "Congrats! Signup successfully" });
       next();
