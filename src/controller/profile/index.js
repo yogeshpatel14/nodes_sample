@@ -13,6 +13,12 @@ const getProfileData = async (req, res, next) => {
 
 const updateProfileInfo = async (req, res, next) => {
   try {
+    if (req.body.userId || req.body.userName) {
+      res
+        .status(400)
+        .send({ message: "incorrect body. Please remove userId or userName" });
+      return;
+    }
     const tokenInfo = await getUserIdFromToken(req, res, next);
     const profileInfo = await updateProfileData(tokenInfo.id, req.body);
     res.status(200).send(profileInfo);
