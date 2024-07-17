@@ -9,13 +9,10 @@ var session = require("express-session");
 var compression = require("compression");
 const actuator = require("express-actuator");
 
-// route
-const BlogRouter = require("./src/router/blog");
-const AuthRouter = require("./src/router/auth");
-const ProfileRoute = require("./src/router/profile");
 // mongoose config
 const MongooseConfig = require("./src/db-connection");
 const { CustomValidation } = require("express-validator/lib/context-items");
+const rootRouter = require("./root-router");
 
 // declare server
 const server = Express();
@@ -54,9 +51,7 @@ server.use(compression());
 server.use(actuator());
 
 // Router
-server.use("/blog", BlogRouter);
-server.use("/", AuthRouter);
-server.use("/profile", ProfileRoute);
+rootRouter(server);
 
 server.get("/", (req, res, next) => {
   res.send("start server");

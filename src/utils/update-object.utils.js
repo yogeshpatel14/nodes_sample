@@ -8,6 +8,13 @@ const updateMongoDbObject = (data) => {
   return data;
 };
 
+const updateMongoDbObjectWithourRemoveId = (data) => {
+  delete data.__v;
+  delete data.createdAt;
+  delete data.updatedAt;
+  return data;
+};
+
 const ValidationResultMessage = validationResult.withDefaults({
   formatter: (error) => error.msg,
 });
@@ -15,4 +22,5 @@ const ValidationResultMessage = validationResult.withDefaults({
 module.exports = {
   updateMongoDbObject,
   ValidationResultMessage,
+  updateMongoDbObjectWithourRemoveId,
 };

@@ -2,6 +2,7 @@ const express = require("express");
 const { LoginSchema } = require("../../model/auth/login");
 
 const blogRouter = express.Router();
+
 const auth = (req, res, next) => {
   if (req.query.password === "123") {
     next();

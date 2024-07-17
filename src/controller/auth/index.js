@@ -14,34 +14,33 @@ const loginController = async (req, res, next) => {
     userName: req.body.userName,
   })
     .then(async (response) => {
-      if (response !== null) {
+      if (response) {
         const isCorrectPwd = await response.verifyPassword(
           req.body.password,
           response.password
         );
+        let statusCode = 200;
         if (isCorrectPwd) {
-          await saveDataToLoginSchema(req.body.userName, 200);
           const payload = {
             id: response._id.toString(),
-            userName: req.body.userName,
+            // userName: req.body.userName,
           };
           const token = GenerateTokenWithData(payload);
-          res.status(200).send({ token });
+          return res.send({ token });
         } else {
-          await saveDataToLoginSchema(req.body.userName, 400);
+          statusCode = 400;
           res.status(400).send({ message: "wrong userName and password" });
         }
-        next();
       } else {
-        await saveDataToLoginSchema(req.body.userName, 404);
+        statusCode = 404;
         res.status(404).send({ message: "user not found!" });
-        next();
       }
+      saveDataToLoginSchema(req.body.userName, statusCode);
     })
     .catch(async (_error) => {
-      await saveDataToLoginSchema(req.body.userName, 400);
+      saveDataToLoginSchema(req.body.userName, 400);
       res.status(400).send({ message: "wrong userName and password" });
-      next();
+      return next();
     });
 };
 
